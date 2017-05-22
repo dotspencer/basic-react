@@ -1,11 +1,14 @@
 var path = require('path');
 var htmlPlugin = require('html-webpack-plugin');
+var extractTextPlugin = require('extract-text-webpack-plugin');
 
 var htmlPluginConfig = new htmlPlugin({
   template: __dirname + '/src/index.html',
   filename: 'index.html',
   inject: true
 });
+
+var extractTextPluginConfig = new extractTextPlugin('style.css');
 
 
 module.exports = {
@@ -23,9 +26,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: extractTextPlugin.extract({
+          use: 'css-loader'
+        })
       }
     ]
   },
-  plugins: [htmlPluginConfig]
+  plugins: [htmlPluginConfig, extractTextPluginConfig]
 }
